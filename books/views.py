@@ -1,9 +1,9 @@
 from rest_framework import generics
 from rest_framework import filters
-from books.models import Author, Book
+from books.models import Author, Book, Tag
 from books.serializers import (
-    AuthorSerializer, BookListSerializer,
-    BookSerializer
+    AuthorSerializer, BookDetailSerializer, BookListSerializer,
+    BookSerializer, TagSerializer
 )
 
 
@@ -44,7 +44,7 @@ class BookList(MethodSerializerMixin, generics.ListCreateAPIView):
 
 class BookDetailView(MethodSerializerMixin, generics.RetrieveUpdateAPIView):
     queryset = Book.objects.all()
-    serializer_class = BookListSerializer
+    serializer_class = BookDetailSerializer
 
     method_serializers = {
         'PUT': BookSerializer,
@@ -57,6 +57,18 @@ class AuthorDetail(generics.RetrieveUpdateAPIView):
     serializer_class = AuthorSerializer
 
 
+class TagList(generics.ListCreateAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+
+class TagDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+
 author_list = AuthorsList.as_view()
 book_list_view = BookList.as_view()
 book_detail_view = BookDetailView.as_view()
+tag_list_view = TagList.as_view()
+tag_detail_view = TagDetailView.as_view()
